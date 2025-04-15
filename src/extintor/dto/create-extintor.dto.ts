@@ -1,12 +1,19 @@
-import { IsDate, IsInt, IsString, isDate } from 'class-validator';
+import { IsDate, IsInt, IsNumber, IsPositive, IsString, isDate } from 'class-validator';
 import { Type } from 'class-transformer';
 
 export class CreateExtintorDto {
   @IsString()
   nome: string;
+
+  @IsString()
   classe: string;
-  @IsInt()
+
+  @IsNumber()
+  @IsPositive()
   preco: number;
+
+  @IsNumber()
+  @IsPositive()
   peso: number;
 
   @Type(() => Date)
