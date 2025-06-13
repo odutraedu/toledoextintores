@@ -2,21 +2,21 @@ import { IsDate, IsInt, IsNumber, IsPositive, IsString, isDate } from 'class-val
 import { Type } from 'class-transformer';
 
 export class CreateExtintorDto {
-  @IsString()
+  @IsString( {message: 'Nome deve ser valido'})
   nome: string;
 
-  @IsString()
+  @IsString( {message: 'Classe deve ser valido'})
   classe: string;
 
-  @IsNumber()
-  @IsPositive()
+  @IsNumber({}, {message: ' deve ser um número'})
+  @IsPositive(   {message: 'Preco deve ser um número positivo'})
   preco: number;
 
-  @IsNumber()
-  @IsPositive()
+  @IsNumber( {}, {message: 'Peso deve ser um número'})
+  @IsPositive( {message: 'Peso deve ser um número positivo'})
   peso: number;
 
   @Type(() => Date)
-  @IsDate()
+  @IsDate({message: 'Data de validade deve ser uma data válida'})
   validade: Date;
 }

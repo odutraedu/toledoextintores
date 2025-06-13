@@ -55,20 +55,44 @@ export class ExtintorService {
     return extintor ? this.maptoEntity(extintor) : null;
   }
 
-  async update(
-    id: number,
-    updateExtintorDto: UpdateExtintorDto,
-  ): Promise<Extintor> {
-    const extintor = await this.prisma.extintor.update({
-      where: { id },
-      data: updateExtintorDto,
-    });
-    return this.maptoEntity(extintor);
+ async update(
+  id: number,
+  updateExtintorDto: UpdateExtintorDto,
+): Promise<Extintor> {
+  // Remove explicitamente o campo id, caso venha do front-end, usando cast para any
+  const { id: _, ...dataWithoutId } = updateExtintorDto as any;
+
+  // Converte validade para Date se necessário
+  if (dataWithoutId.validade) {
+    dataWithoutId.validade = new Date(dataWithoutId.validade);
   }
+
+  const extintor = await this.prisma.extintor.update({
+    where: { id },
+    data: dataWithoutId,
+  });
+  return this.maptoEntity(extintor);
+}
 
   async remove(id: number): Promise<Extintor> {
     const extintor = await this.prisma.extintor.delete({
       where: { id },
+    });
+    return this.maptoEntity(extintor);
+  }
+
+  async entradaEstoque(id: number, quantidade: number): Promise<Extintor> {
+    const extintor = await this.prisma.extintor.update({
+      where: { id },
+      data: { quantidade: { increment: quantidade } },
+    });
+    return this.maptoEntity(extintor);
+  }
+
+  async saidaEstoque(id: number, quantidade: number): Promise<Extintor> {
+    const extintor = await this.prisma.extintor.update({
+      where: { id },
+      data: { quantidade: { decrement: quantidade } },
     });
     return this.maptoEntity(extintor);
   }

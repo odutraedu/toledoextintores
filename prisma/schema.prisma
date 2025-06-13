@@ -20,4 +20,12 @@ model Extintor {
   preco Float
   validade DateTime
   peso Float
+  quantidade Int?
+}
+
+model User{
+  id Int @id @default(autoincrement())
+  nome String
+  email String @unique
+  senha String
 }
